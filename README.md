@@ -1,5 +1,3 @@
-
 # State Management Example
-
 
 # TaskNotes
