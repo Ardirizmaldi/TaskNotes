@@ -31,11 +31,14 @@ class _TaskScreenState extends State<TaskScreen> {
                 ),
                 child: AddTaskScreen(
                   callbackFunction: (String taskTitle) {
-                    setState(() {
-                      listTask?.add(
-                        TaskModel(title: taskTitle, isDone: false),
-                      );
-                    });
+                    if (taskTitle != null) {
+                      setState(() {
+                        listTask?.add(
+                          TaskModel(title: taskTitle, isDone: false),
+                        );
+                      });
+                      Navigator.pop(context);
+                    }
                     Navigator.pop(context);
                   },
                 ),
@@ -94,7 +97,6 @@ class _TaskScreenState extends State<TaskScreen> {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
