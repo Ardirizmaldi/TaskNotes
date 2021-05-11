@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:state_management_examples/models/task_model.dart';
+import 'package:state_management_examples/screens/add_task_screen.dart';
+import 'package:state_management_examples/screens/widgets/task_list_widget.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   const TaskScreen({Key key}) : super(key: key);
+
+  @override
+  _TaskScreenState createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  List<TaskModel> listTask = [];
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +20,29 @@ class TaskScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: AddTaskScreen(
+                  callbackFunction: (String taskTitle) {
+                    setState(() {
+                      listTask?.add(
+                        TaskModel(title: taskTitle, isDone: false),
+                      );
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ),
+          );
+        },
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +67,7 @@ class TaskScreen extends StatelessWidget {
                   backgroundColor: Colors.white,
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 12,
                 ),
                 Text(
                   'Todoey',
@@ -46,14 +78,16 @@ class TaskScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '12 Tasks',
+                  ((listTask?.length == 0) ?? 0)
+                      ? 'You Have No Task'
+                      : 'You Have ${listTask?.length} Tasks',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
               ],
             ),
@@ -68,30 +102,8 @@ class TaskScreen extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: Text('Test'),
-                    trailing: Checkbox(
-                      value: true,
-                      onChanged: null,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('Test'),
-                    trailing: Checkbox(
-                      value: true,
-                      onChanged: null,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('Test'),
-                    trailing: Checkbox(
-                      value: true,
-                      onChanged: null,
-                    ),
-                  ),
-                ],
+              child: TaskList(
+                taskModels: listTask,
               ),
             ),
           ),

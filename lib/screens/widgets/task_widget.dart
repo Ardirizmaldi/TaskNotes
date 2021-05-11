@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_examples/models/task_model.dart';
 
 class TaskWidget extends StatelessWidget {
-  final TaskModel taskModel;
+  final String title;
+  final bool isDone;
+  final Function callbackFunction;
 
-  const TaskWidget({
+  TaskWidget({
     Key key,
-    this.taskModel,
+    this.title,
+    this.isDone,
+    this.callbackFunction,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(taskModel.title),
-      trailing: Checkbox(
-        value: taskModel.isDone,
-        onChanged: (val) {},
+    return Container(
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(
+            decoration:
+                isDone ? TextDecoration.lineThrough : TextDecoration.none,
+          ),
+        ),
+        trailing: Checkbox(
+          activeColor: Colors.lightBlueAccent,
+          value: isDone,
+          onChanged: callbackFunction,
+        ),
       ),
     );
   }
