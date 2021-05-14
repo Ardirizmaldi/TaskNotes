@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_examples/models/task_model.dart';
+import 'package:provider/provider.dart';
+import 'package:state_management_examples/models/task_data.dart';
 import 'package:state_management_examples/screens/add_task_screen.dart';
 import 'package:state_management_examples/screens/widgets/task_list_widget.dart';
 
-class TaskScreen extends StatefulWidget {
+class TaskScreen extends StatelessWidget {
   const TaskScreen({Key key}) : super(key: key);
 
   @override
-  _TaskScreenState createState() => _TaskScreenState();
-}
-
-class _TaskScreenState extends State<TaskScreen> {
-  List<TaskModel> listTask = [];
-
-  @override
   Widget build(BuildContext context) {
+    final listTaskData = Provider.of<TaskData>(context);
+
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       floatingActionButton: FloatingActionButton(
@@ -29,19 +25,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: AddTaskScreen(
-                  callbackFunction: (String taskTitle) {
-                    if (taskTitle != null) {
-                      setState(() {
-                        listTask?.add(
-                          TaskModel(title: taskTitle, isDone: false),
-                        );
-                      });
-                      Navigator.pop(context);
-                    }
-                    Navigator.pop(context);
-                  },
-                ),
+                child: AddTaskScreen(),
               ),
             ),
           );
@@ -81,9 +65,9 @@ class _TaskScreenState extends State<TaskScreen> {
                   ),
                 ),
                 Text(
-                  ((listTask?.length == 0) ?? 0)
+                  ((listTaskData?.taskCount == 0) ?? 0)
                       ? 'You Have No Task'
-                      : 'You Have ${listTask?.length} Tasks',
+                      : 'You Have ${listTaskData?.taskCount} Tasks',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -104,9 +88,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   topRight: Radius.circular(20),
                 ),
               ),
-              child: TaskList(
-                taskModels: listTask,
-              ),
+              child: TaskList(),
             ),
           ),
         ],

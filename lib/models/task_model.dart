@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class TaskModel {
   String title;
-  bool isDone = false;
+  bool isDone;
   TaskModel({
     @required this.title,
-    @required this.isDone,
+    this.isDone = false,
   });
 
   void toggleDone() {

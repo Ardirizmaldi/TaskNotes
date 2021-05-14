@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:state_management_examples/models/task_data.dart';
 import 'package:state_management_examples/models/task_model.dart';
 import 'package:state_management_examples/screens/widgets/task_widget.dart';
 
-class TaskList extends StatefulWidget {
-  final List<TaskModel> taskModels;
-  const TaskList({
-    Key key,
-    this.taskModels,
-  }) : super(key: key);
+class TaskList extends StatelessWidget {
+  const TaskList({Key key}) : super(key: key);
 
-  @override
-  _TaskListState createState() => _TaskListState();
-}
-
-class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget?.taskModels?.length ?? 0,
-      itemBuilder: (context, index) {
-        return TaskWidget(
-          title: widget.taskModels[index].title,
-          isDone: widget.taskModels[index].isDone,
-          callbackFunction: (value) => setState(() {
-            widget.taskModels[index].toggleDone();
-          }),
-        );
-      },
+    return Consumer<TaskData>(
+      builder: (context, taskData, child) => ListView.builder(
+        itemCount: taskData?.taskCount ?? 0,
+        itemBuilder: (context, index) {
+          final currentTask = taskData.tasks[index];
+          return TaskWidget(
+            title: currentTask.title,
+            isDone: currentTask.isDone,
+            checkTask: (isDone) => taskData.updateTask(currentTask),
+            removeTask: () => taskData.removeTask(currentTask),
+          );
+        },
+      ),
     );
   }
 }

@@ -4,13 +4,15 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class TaskWidget extends StatelessWidget {
   final String title;
   final bool isDone;
-  final Function callbackFunction;
+  final Function checkTask;
+  final Function removeTask;
 
   TaskWidget({
     Key key,
     this.title,
     this.isDone,
-    this.callbackFunction,
+    this.checkTask,
+    this.removeTask,
   }) : super(key: key);
 
   @override
@@ -18,20 +20,12 @@ class TaskWidget extends StatelessWidget {
     return new Slidable(
       secondaryActions: [
         IconSlideAction(
-          foregroundColor: Colors.lightBlueAccent,
-          closeOnTap: true,
-          caption: 'Edit',
-          color: Colors.white,
-          icon: Icons.mode_edit,
-          onTap: () {},
-        ),
-        IconSlideAction(
           foregroundColor: Colors.red,
           closeOnTap: true,
-          caption: 'Delete',
+          caption: 'Remove',
           color: Colors.white,
           icon: Icons.delete,
-          onTap: () {},
+          onTap: removeTask,
         ),
       ],
       actionPane: SlidableDrawerActionPane(),
@@ -51,7 +45,7 @@ class TaskWidget extends StatelessWidget {
             child: Checkbox(
               activeColor: Colors.lightBlueAccent,
               value: isDone,
-              onChanged: callbackFunction,
+              onChanged: checkTask,
             ),
           ),
         ),
